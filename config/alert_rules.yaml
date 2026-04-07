@@ -1,0 +1,30 @@
+# 报警规则配置
+
+rules:
+  # 工作流失败报警
+  - name: workflow_failure
+    enabled: true
+    condition: "status == 'failed'"
+    severity: "critical"
+    message: "🚨 工作流执行失败"
+
+  # 任务失败报警
+  - name: task_failure
+    enabled: true
+    condition: "any(task.status == 'failed' for task in tasks)"
+    severity: "warning"
+    message: "⚠️ 任务执行失败"
+
+  # 超时报警（1小时）
+  - name: timeout
+    enabled: true
+    condition: "duration > 3600"
+    severity: "warning"
+    message: "⏰ 工作流执行超时（1小时）"
+
+  # 重试次数超限
+  - name: retry_exceeded
+    enabled: true
+    condition: "retry_count > 3"
+    severity: "critical"
+    message: "🔄 重试次数超限"

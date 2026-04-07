@@ -1,0 +1,26 @@
+# 监控 Agent 配置
+
+# appProduct 项目目录
+app_product_dir: "/root/.openclaw/agents/main/appProduct"
+
+# 监控配置
+monitoring:
+  interval: 5  # 监控间隔（秒）
+  enable_auto_start: false  # 自动启动监控
+
+# 飞书集成配置
+feishu:
+  enabled: true
+  app_id: "cli_a945c7caafb95bc9"
+  app_secret: "oLo5Rz09KpNa7CXcwVdJjmGre1MGPxMt"
+  channel: ""  # 飞书频道ID（可选）
+
+# 报警配置
+alert:
+  enabled: true
+  rules_file: "config/alert_rules.yaml"
+
+# 日志配置
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  file: "logs/monitoring.log"

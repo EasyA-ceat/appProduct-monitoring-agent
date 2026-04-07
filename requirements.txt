@@ -1,0 +1,13 @@
+# 核心依赖
+click==8.1.7
+pyyaml==6.0.1
+numpy==1.26.3
+
+# 任务调度
+apscheduler==3.10.4
+
+# 文件监控
+watchdog==4.0.0
+
+# 飞书 SDK（可选，用于高级功能）
+# lark-oapi==1.0.0
