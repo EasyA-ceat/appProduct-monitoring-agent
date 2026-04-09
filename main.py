@@ -115,7 +115,38 @@ def main():
     # 执行命令
     if args.command == 'start':
         logger.info("启动监控服务...")
-        # TODO: 实现监控服务启动逻辑
+        
+        # 初始化调度器
+        scheduler = WorkflowScheduler()
+        
+        # 定义监控回调函数
+        def monitor_callback():
+            current_state = monitor.get_current_status()
+            current_metrics = monitor.get_metrics()
+            
+            # 触发报警检查
+            if alert_engine:
+                alert_engine.trigger_workflow_alerts(current_state, current_metrics)
+            
+            # 记录状态
+            if current_state:
+                summary = monitor.get_workflow_summary()
+                logger.debug(f"工作流状态: {summary.get('status')}, 进度: {summary.get('progress', 0):.1f}%")
+        
+        # 启动定时监控
+        monitor_interval = config.get('monitoring', {}).get('interval', 5)
+        scheduler.schedule_monitoring(monitor_callback, monitor_interval)
+        
+        logger.info("监控服务已启动，按 Ctrl+C 停止")
+        
+        try:
+            # 保持主线程运行
+            import time
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            logger.info("接收到中断信号，停止监控服务")
+            scheduler.stop_monitoring()
 
     elif args.command == 'status':
         summary = monitor.get_workflow_summary()

@@ -161,7 +161,7 @@ class WorkflowMonitor:
 
                 # 检测状态变化
                 state_changed = self._detect_state_change(self._last_state, current_state)
-                metrics_changed = self._detect_metrics_change(self(self._last_metrics, current_metrics))
+                metrics_changed = self._detect_metrics_change(self._last_metrics, current_metrics)
 
                 if state_changed or metrics_changed:
                     logger.info("检测到状态或指标变化")
