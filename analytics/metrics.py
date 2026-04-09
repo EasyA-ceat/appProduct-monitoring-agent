@@ -133,17 +133,29 @@ class MetricsAnalyzer:
                 'message': '没有有效的耗时数据'
             }
 
-        import numpy as np
         durations_sorted = sorted(durations)
+        n = len(durations_sorted)
+
+        def calculate_percentile(sorted_data, percentile):
+            """计算百分位数（纯 Python 实现）"""
+            if n == 0:
+                return 0
+            idx = (percentile / 100) * (n - 1)
+            idx_floor = int(idx)
+            idx_ceil = idx_floor + 1
+            if idx_ceil >= n:
+                return sorted_data[idx_floor]
+            weight = idx - idx_floor
+            return sorted_data[idx_floor] * (1 - weight) + sorted_data[idx_ceil] * weight
 
         return {
             'total_duration': sum(durations),
-            'avg_duration': np.mean(durations),
+            'avg_duration': sum(durations) / n,
             'min_duration': min(durations),
             'max_duration': max(durations),
-            'p50_duration': np.percentile(durations_sorted, 50),
-            'p95_duration': np.percentile(durations_sorted, 95),
-            'sample_count': len(durations)
+            'p50_duration': calculate_percentile(durations_sorted, 50),
+            'p95_duration': calculate_percentile(durations_sorted, 95),
+            'sample_count': n
         }
 
     def find_bottleneck(self, days: int = 7) -> Dict:
